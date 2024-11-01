@@ -4,11 +4,22 @@ import { FaQuoteRight } from "react-icons/fa";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 const Carousel = () => {
-  const [people, setPeople] = useState(list);
+  const [people, setPeople] = useState(longList);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  const prevSlide = () => {};
+  const prevSlide = () => {
+    setCurrentSlide((oldSlide) => {
+      const result = (oldSlide - 1 + people.length) % people.length;
+      return result;
+    });
+  };
 
-  const nextSlide = () => {};
+  const nextSlide = () => {
+    setCurrentSlide((oldSlide) => {
+      const result = (oldSlide + 1) % people.length;
+      return result;
+    });
+  };
 
   return (
     <section className="slider-container">
@@ -17,7 +28,11 @@ const Carousel = () => {
         return (
           <article
             className="slide"
-            style={{ transform: `translateX(${100 * personIndex}%)` }}
+            style={{
+              transform: `translateX(${100 * (personIndex - currentSlide)}%)`,
+              opacity: personIndex === currentSlide ? 1 : 0,
+              visibility: personIndex === currentSlide ? "visible" : "hidden",
+            }}
             key={id}
           >
             <img src={image} alt={name} className="person-img" />
